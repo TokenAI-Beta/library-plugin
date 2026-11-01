@@ -18,6 +18,7 @@ function startServer() {
     const routes = {
       "/": join(root, "preview/index.html"),
       "/preview/run.js": join(root, "preview/run.js"),
+      "/preview/portal-mock.js": join(root, "preview/portal-mock.js"),
       "/lib/client.js": join(root, "lib/client.js"),
       "/vendor/react.development.js": reactUmd,
       "/vendor/react-dom.development.js": reactDomUmd,

@@ -14,21 +14,30 @@
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
+    "./icon": "./icon.svg",
     "./package.json": "./package.json"
   },
   "files": [
     "lib/index.js",
     "lib/client.js",
-    "lib/store.js",
+    "lib/api.js",
+    "lib/panel.js",
     "cordis.patch.yml",
+    "icon.svg",
     "README.md"
   ],
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "client": {
-      "inject": [],
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
       "platform": "web"
     }
   },

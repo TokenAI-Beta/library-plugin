@@ -43,7 +43,7 @@
 
   function q(sel) { return document.querySelector(sel); }
   function text() { return document.body.innerText; }
-  function flush() { return new Promise(function (resolve) { setTimeout(resolve, 30); }); }
+  function flush() { return new Promise(function (resolve) { setTimeout(resolve, 80); }); }
   function setVal(el, value) {
     var proto = el.tagName === "TEXTAREA" ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
     Object.getOwnPropertyDescriptor(proto, "value").set.call(el, value);
@@ -78,16 +78,16 @@
         if (body.indexOf("文件 + 笔记 · 放进来 = 全员可见") < 0) throw new Error("subtitle");
         if (body.indexOf("← 返回对话") < 0) throw new Error("back");
         if (body.indexOf("记结论和经验，搜一下就能找到 —— AI 助理也能直接引用") < 0) throw new Error("hint");
-        if (body.indexOf("本机暂存") < 0) throw new Error("stub");
+        if ((window.__zlkCalls || []).join("\n").indexOf("GET /portal/api/kb/list") < 0) throw new Error("kb list");
         if (q("[data-zlk-search]").getAttribute("placeholder").indexOf("印尼") < 0) throw new Error("placeholder");
         if (!q("[data-zlk-tab='notes']").classList.contains("on")) throw new Error("notes tab");
-        if (body.indexOf("+ 记一条") < 0) throw new Error("compose");
+        if (body.indexOf("＋ 记一条") < 0) throw new Error("compose");
         if (body.indexOf("印尼算力中心市场前景（2027-2035）与中美对比 · 结论摘要") < 0) throw new Error("sample");
         if (body.indexOf("2026-09-27 03:58 · agent") < 0) throw new Error("meta");
-        await clickSel("[data-zlk-view='sample-indonesia']");
-        if (text().indexOf("示例笔记，写在本机暂存里") < 0) throw new Error("view");
-        await clickSel("[data-zlk-view='sample-indonesia']");
-        if (text().indexOf("示例笔记，写在本机暂存里") >= 0) throw new Error("collapsed");
+        await clickSel("[data-zlk-view='2026-09-27-sample.md']");
+        if (text().indexOf("示例笔记。") < 0) throw new Error("view");
+        await clickSel("[data-zlk-view='2026-09-27-sample.md']");
+        if (text().indexOf("示例笔记。") >= 0) throw new Error("collapsed");
         setVal(q("[data-zlk-search]"), "不存在的词xyz");
         await clickSel("[data-zlk-search-btn]");
         if (text().indexOf("没有命中") < 0) throw new Error("miss");
@@ -103,28 +103,31 @@
         await clickSel("[data-zlk-save]");
         if (text().indexOf("报价口径") < 0) throw new Error("saved");
         if (text().indexOf("已记下") < 0) throw new Error("toast");
-        var del = q("[data-zlk-del]:not([data-zlk-del='sample-indonesia'])");
+        var del = q("[data-zlk-del='note-1.md']");
         if (!del) throw new Error("delete button");
         del.click();
         await flush();
         if (text().indexOf("报价口径") >= 0) throw new Error("still listed");
         await clickSel("[data-zlk-tab='files']");
         if (!q("[data-zlk-tab='files']").classList.contains("on")) throw new Error("files tab");
-        if (text().indexOf("还没有文件") < 0) throw new Error("files empty");
-        if (!q("[data-zlk-upload]")) throw new Error("upload");
+        if (text().indexOf("① 建个文件夹，把文件传进来") < 0) throw new Error("files empty");
+        if (text().indexOf("⬆ 拖文件到这里上传") < 0) throw new Error("drop");
+        await clickSel("[data-zlk-mkdir]");
+        setVal(q("[data-zlk-folder-name]"), "客户A");
+        await clickSel("[data-zlk-mkdir-save]");
+        if (text().indexOf("客户A") < 0) throw new Error("folder");
         var input = q("[data-zlk-file-input]");
         var upload = new File(["到岸价口径"], "口径.txt", { type: "text/plain" });
         var transfer = new DataTransfer();
         transfer.items.add(upload);
         input.files = transfer.files;
         input.dispatchEvent(new Event("change", { bubbles: true }));
-        await new Promise(function (resolve) { setTimeout(resolve, 100); });
+        await flush();
         if (text().indexOf("口径.txt") < 0) throw new Error("uploaded");
-        await clickSel("[data-zlk-view-file]");
-        if (text().indexOf("到岸价口径") < 0) throw new Error("file body");
-        await clickSel("[data-zlk-del-file]");
+        q("[data-zlk-del-file='口径.txt']").click();
+        await flush();
         if (text().indexOf("口径.txt") >= 0) throw new Error("file remains");
-        if (text().indexOf("还没有文件") < 0) throw new Error("files empty again");
+        if ((window.__zlkCalls || []).join("\n").indexOf("GET /portal/api/drive/list") < 0) throw new Error("drive list");
         await clickSel("[data-zlk-back]");
         if (q("[data-zlk-panel]")) throw new Error("still open");
         pass("PASS");
