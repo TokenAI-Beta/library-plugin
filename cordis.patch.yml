@@ -1,7 +1,7 @@
 # 资料库：向 Web profile 插入侧栏面板（客户端插件，不改 dsh 源码）。
 # 行 id 用 ziliaoku，避开工作台 desk-panel 自带的侧栏 id desk-hub。
-# 安装：dsh plugin --profile web add ./library-plugin-0.1.0.tgz
+# 安装：dsh plugin --profile web add ./anywork-library-plugin-0.1.0.tgz
 # `--profile` 写在子命令前面。
 - insert:
     - id: ziliaoku
-      name: 'library-plugin'
+      name: 'anywork-library-plugin'

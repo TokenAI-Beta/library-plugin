@@ -1,7 +1,7 @@
 {
-  "name": "library-plugin",
-  "version": "0.1.0",
-  "private": true,
+  "name": "anywork-library-plugin",
+  "version": "0.2.13",
+  "private": false,
   "description": "资料库：文件 + 笔记（DSH Web 插件）",
   "license": "MIT",
   "type": "module",
@@ -19,6 +19,8 @@
   },
   "files": [
     "lib/index.js",
+    "lib/store.js",
+    "lib/update.js",
     "lib/client.js",
     "lib/api.js",
     "lib/panel.js",

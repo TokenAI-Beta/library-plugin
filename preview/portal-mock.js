@@ -1,12 +1,5 @@
 (function () {
-  var notes = [{
-    name: "2026-09-27-sample.md",
-    title: "印尼算力中心市场前景（2027-2035）与中美对比 · 结论摘要",
-    author: "agent",
-    mtime: "2026-09-27 03:58",
-    size: 80,
-    content: "示例笔记。印尼算力中心到 2035 的需求还在抬，和中美的差距主要在电力和落地速度。",
-  }];
+  var notes = [];
   var role = "admin";
   var drive = { "": [] };
   window.__zlkCalls = [];
@@ -31,13 +24,13 @@
     var method = (init && init.method) || "GET";
     window.__zlkCalls.push(method + " " + url.pathname);
     var path = url.pathname;
-    if (method === "GET" && path === "/portal/api/kb/list") {
+    if (method === "GET" && path === "/plugins/anywork-library-plugin/kb/list") {
       return Promise.resolve(json(200, {
         role: role,
         notes: notes.map(function (n) { return { name: n.name, title: n.title, author: n.author, mtime: n.mtime, size: n.size }; }),
       }));
     }
-    if (method === "GET" && path === "/portal/api/kb/search") {
+    if (method === "GET" && path === "/plugins/anywork-library-plugin/kb/search") {
       var q = (url.searchParams.get("q") || "").toLowerCase();
       var hits = [];
       notes.forEach(function (n) {
@@ -47,13 +40,13 @@
       });
       return Promise.resolve(json(200, { q: q, hits: hits, truncated: false }));
     }
-    if (method === "GET" && path === "/portal/api/kb/note") {
+    if (method === "GET" && path === "/plugins/anywork-library-plugin/kb/note") {
       var name = url.searchParams.get("name");
       var found = notes.filter(function (n) { return n.name === name; })[0];
       if (!found) return Promise.resolve(json(404, { error: "笔记不存在" }));
       return Promise.resolve(json(200, { ok: true, name: found.name, content: found.content }));
     }
-    if (method === "POST" && path === "/portal/api/kb/save") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/kb/save") {
       return readJson(init && init.body).then(function (payload) {
         if (!String(payload.content || "").trim()) return json(400, { error: "内容不能为空" });
         var title = String(payload.title || "").trim() || String(payload.content).split("\n")[0].slice(0, 36);
@@ -62,18 +55,18 @@
         return json(200, { ok: true, name: item.name });
       });
     }
-    if (method === "POST" && path === "/portal/api/kb/rm") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/kb/rm") {
       return readJson(init && init.body).then(function (payload) {
         if (role !== "admin") return json(403, { error: "admin only" });
         notes = notes.filter(function (n) { return n.name !== payload.name; });
         return json(200, { ok: true });
       });
     }
-    if (method === "GET" && path === "/portal/api/drive/list") {
+    if (method === "GET" && path === "/plugins/anywork-library-plugin/drive/list") {
       var dir = url.searchParams.get("path") || "";
       return Promise.resolve(json(200, { path: dir, entries: (drive[dir] || []).slice() }));
     }
-    if (method === "POST" && path === "/portal/api/drive/mkdir") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/drive/mkdir") {
       return readJson(init && init.body).then(function (payload) {
         var dir = payload.path || "";
         var folder = { name: payload.name, dir: true, size: 0, mtime: "2026-11-01T12:00:00.000Z" };
@@ -84,14 +77,14 @@
         return json(200, { ok: true, path: child });
       });
     }
-    if (method === "POST" && path === "/portal/api/drive/upload") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/drive/upload") {
       var upDir = url.searchParams.get("path") || "";
       var upName = url.searchParams.get("name") || "file";
       drive[upDir] = drive[upDir] || [];
       drive[upDir].push({ name: upName, dir: false, size: 12, mtime: "2026-11-01T12:00:00.000Z" });
       return Promise.resolve(json(200, { ok: true, path: upDir ? upDir + "/" + upName : upName, size: 12 }));
     }
-    if (method === "POST" && path === "/portal/api/drive/rm") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/drive/rm") {
       return readJson(init && init.body).then(function (payload) {
         var rel = String(payload.path || "");
         var slash = rel.lastIndexOf("/");
@@ -101,7 +94,7 @@
         return json(200, { ok: true });
       });
     }
-    if (method === "POST" && path === "/portal/api/drive/mv") {
+    if (method === "POST" && path === "/plugins/anywork-library-plugin/drive/mv") {
       return readJson(init && init.body).then(function () { return json(200, { ok: true, path: "" }); });
     }
     return Promise.resolve(json(404, { error: "not found " + path }));
