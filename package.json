@@ -1,6 +1,6 @@
 {
   "name": "anywork-library-plugin",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "private": false,
   "description": "资料库：文件 + 笔记（DSH Web 插件）",
   "license": "MIT",

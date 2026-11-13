@@ -8,7 +8,7 @@
 
 ```sh
 npm pack anywork-library-plugin --registry https://registry.npmjs.org
-dsh plugin --profile web add ./anywork-library-plugin-0.2.13.tgz
+dsh plugin --profile web add ./anywork-library-plugin-0.2.14.tgz
 ```
 
 `--profile` 写在子命令前面。`add` 会把本包写进该 profile 的 `dsh.profile.bundles`。浏览器入口是导出的 `./client`（`dsh.client.platform` 为 `web`，并依赖 `@deepseek-ai/dsh-client-ui-slots` 和 `@deepseek-ai/dsh-client-ui-sidebar`）。

@@ -5,7 +5,7 @@ import test from "node:test";
 test("package is an installable web client plugin", () => {
   const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
   assert.equal(pkg.name, "anywork-library-plugin");
-  assert.equal(pkg.version, "0.2.13");
+  assert.equal(pkg.version, "0.2.14");
   assert.equal(pkg.exports["./client"], "./lib/client.js");
   assert.equal(pkg.dsh.bundle.patch, "./cordis.patch.yml");
   assert.equal(pkg.dsh.client.platform, "web");
@@ -27,6 +27,9 @@ test("package is an installable web client plugin", () => {
   assert.match(client, /或写一句，回车记下/);
   assert.match(client, /function joinPath\(/);
   assert.match(client, /检查更新/);
+  assert.match(client, /My files/);
+  assert.match(client, /Check for updates/);
+  assert.match(client, /documentElement.lang/);
   assert.match(client, /data-zlk-theme/);
   assert.match(client, /#151517/);
   assert.match(client, /\/plugins\/anywork-library-plugin\/update/);

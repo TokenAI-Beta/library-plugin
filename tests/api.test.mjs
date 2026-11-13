@@ -85,6 +85,7 @@ test("login errors stay readable", async () => {
   await assert.rejects(api.listNotes(), (err) => {
     assert.equal(err.status, 401);
     assert.match(portalErrorText(err), /登录/);
+    assert.match(portalErrorText(err, "en"), /Sign in/);
     return true;
   });
 });
